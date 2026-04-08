@@ -5,7 +5,7 @@
 
 ## 0. 你在哪、你是谁、你要干什么
 
-- **本 RT 管什么**：TPR Framework —— 一个基于"三省六部制"的 Multi-Agent 协作 Skill。
+- **本 RT 管什么**：TPR Framework —— 一个基于三层架构的 Multi-Agent 协作 Skill。
 - **你的角色**：维护工程师。负责修复 Bug、增强能力、发布新版本。
 - **绝对铁律**：任何修改都必须走完下面的完整流程，禁止"偷偷改完就跑"。
 
@@ -20,7 +20,7 @@
 - [ ] **阅读 `spec-lite.md`**：回忆 TPR 的核心设计哲学（编排者、三省、飞轮）
 - [ ] **阅读 `changelog.md`**：了解上次改了什么、版本停在哪
 - [ ] **检查分支**：`git branch` 确认当前在 master，尚无遗留的 feature 分支
-- [ ] **检查同步**：对比 `skills/tpr-framework/` 与 `~/tpr-framework-repo/tpr-framework/` 是否一致
+- [ ] **检查同步**：对比 `skills/tpr-framework/` 与 `~/evan-skill-github/tpr-framework/` 是否一致
 
 ---
 
@@ -50,8 +50,8 @@ Refs: RT-001"
 
 ### Step 4: 同步到 GitHub 镜像
 ```bash
-cd ~/tpr-framework-repo
-rsync -av --delete --exclude='.git' ~/.openclaw/skills/tpr-framework/ ./tpr-framework/
+cd ~/evan-skill-github/tpr-framework
+rsync -av --delete --exclude='.git' ~/.openclaw/skills/tpr-framework/ ./
 git add -A
 git commit -m "<type>: <描述>  Refs: RT-001"
 git push origin main
@@ -84,9 +84,9 @@ git branch -d feature/RT-001-<简短描述>
 | 资源 | 路径 |
 |------|------|
 | Skill 运行时源 | `~/.openclaw/skills/tpr-framework/` |
-| GitHub 本地镜像 | `~/tpr-framework-repo/` |
-| RT 管理档案 | `~/.openclaw/RT/RT-001/` |
-| 发行包存储 | `~/.openclaw/RT/RT-001/releases/` |
+| GitHub 本地镜像 | `~/evan-skill-github/tpr-framework/` |
+| RT 管理档案 | `~/evan-skill-github/tpr-framework/RT/RT-001/` |
+| 发行包存储 | `~/evan-skill-github/tpr-framework/RT/RT-001/releases/` |
 | 远程仓库 | `https://github.com/evan-zhang/tpr-framework.git` |
 
 ---
