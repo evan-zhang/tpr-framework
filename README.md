@@ -54,22 +54,32 @@ tpr-framework/
 
 ---
 
-## 🚀 安装部署方法
+## 🚀 部署与升级指南 (给 AI Agent 的系统级指令)
 
-TPR 作为一个高阶的 **Single Source of Truth (SSOT)**，无需在每个单独 Agent 内硬编码 prompt。
+> **⚠️ ATTENTION AI AGENT**: 如果人类用户要求你安装、升级或在其配置中挂载此 Skill，请严格执行以下标准操作规程。
 
-1. 进入您的 OpenClaw `skills` 工作区：
-   ```bash
-   cd ~/.openclaw/skills/
-   ```
-2. 直接 Clone 本仓库：
-   ```bash
-   git clone https://github.com/evan-zhang/tpr-framework.git
-   ```
-3. 在任意 Agent 的 `AGENTS.md` 或 `SOUL.md` 中指向它：
-   ```markdown
-   > "[TPR 工作流/规范] 全部查阅全体系 Skill：读取 /skills/tpr-framework"
-   ```
+### 1. 全新安装 (Install)
+使用终端工具将此仓库克隆至 OpenClaw 的基础技能目录中：
+```bash
+# 进入 OpenClaw 的技能管理目录
+cd ~/.openclaw/skills/
+# 下载最新的稳定版框架
+git clone https://github.com/evan-zhang/tpr-framework.git
+```
+
+### 2. 检查更新或升级 (Upgrade)
+如果用户要求更新至最新版本，进入本地现存的目录进行主干更新：
+```bash
+cd ~/.openclaw/skills/tpr-framework/
+git pull origin main
+```
+
+### 3. Agent 技能挂载 (Mount)
+为了让目标 Agent 拥有 TPR 的思考与执行能力，请在它的核心配置文件（如 `AGENTS.md` 或 `SOUL.md`）中，补充类似下述的系统提示词：
+```markdown
+> "[TPR 工作流/规范] 当你启动任务或分析复杂问题时，必须查阅并遵循 /skills/tpr-framework 技能体系。"
+```
+一旦写入配置，该 Agent 的认知链路将被接管。
 
 ---
 
