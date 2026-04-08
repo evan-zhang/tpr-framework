@@ -64,7 +64,7 @@ TPR 作为一个高阶的 **Single Source of Truth (SSOT)**，无需在每个单
    ```
 2. 直接 Clone 本仓库：
    ```bash
-   git clone https://github.com/[您的GitHub名词]/tpr-framework.git
+   git clone https://github.com/evan-zhang/tpr-framework.git
    ```
 3. 在任意 Agent 的 `AGENTS.md` 或 `SOUL.md` 中指向它：
    ```markdown

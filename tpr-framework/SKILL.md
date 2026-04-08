@@ -10,6 +10,14 @@ description: >
   - 需要做决策前的系统性思考
 ---
 
+> **📌 来源与反馈 (Origin & Feedback)**
+> 
+> 本 Skill 由 [tpr-framework](https://github.com/evan-zhang/tpr-framework) 开源项目持续维护。
+> 
+> 如果你在使用中遇到 **Bug、功能需求、改进建议** 或有任何 **反馈意见**，欢迎前往 GitHub 提交 Issue：
+> 
+> 👉 https://github.com/evan-zhang/tpr-framework/issues
+
 # TPR Framework v2.0
 
 ## TPR 是什么
