@@ -8,7 +8,7 @@
 
 > **“将模糊的战略狂想，收敛为一行行坚不可摧的代码和可被量化的结果。”**
 
-TPR Framework 是专为 **OpenClaw** 在 Multi-Agent 协作场景下设计的方法论插件（Skill）。它摒弃了单体大模型时代“你问我全自动写”的盲目黑盒作业，引入了基于中国古代“三省六部制”启发的**多层分发、对抗审计与量化演进**架构。
+TPR Framework 是专为 **OpenClaw** 在 Multi-Agent 协作场景下设计的方法论插件（Skill）。它摒弃了单体大模型时代“你问我全自动写”的盲目黑盒作业，引入了基于**多层分立审计**启发的**多层分发、对抗审计与量化演进**架构。
 
 本技能通过硬性拦截规则，彻底杜绝了大模型在长线任务中的“装死”、“假成功”与“注意力骚扰”等弊端。
 
@@ -16,15 +16,15 @@ TPR Framework 是专为 **OpenClaw** 在 Multi-Agent 协作场景下设计的方
 
 ## 🌟 核心特性 (v2.1.0 满血版)
 
-*   **🛡️ “三省”结构化防线**
+*   **🛡️ “三层”结构化防线**
     *   **编排者 (Orchestrator)**：大脑中枢。遵循 *Yield-after-spawn* 和 *Announce-then-act* 原则，只调度，绝不写脏代码。
-    *   **中书省 (Discovery & Planning)**：负责前端需求采集，运用 5 Why 洞察真实痛点，并起草极其严苛的量化 GRV（Goal-Result-Variables）契约。
-    *   **门下省 (Review & Battle)**：制度化挑刺官（Probe）。客观违规直接拦截，主观分歧发回重申，绝不和稀泥。
-    *   **尚书省 (Execution)**：纯粹的执行机器。
+    *   **策划层 / 策划官 (Discovery & Planning)**：负责前端需求采集，运用 5 Why 洞察真实痛点，并起草极其严苛的量化 GRV（Goal-Result-Variables）契约。
+    *   **审查层 / 审计官 (Review & Battle)**：制度化挑刺官（Probe）。客观违规直接拦截，主观分歧发回重申，绝不和稀泥。
+    *   **执行层 / 执行官 (Execution)**：纯粹的执行机器。
 *   **📏 强制量化基线 (Metrics Baseline)**
     所有下游交付不再使用“这是一份好报告”的伪成功标准。要求代码、报告必须含有明确的字数、空字段断言与量化指标，未达标直接触发重构。
 *   **🔁 执行层自验证 (Self-Verification)**
-    尚书省在出活并上交前，被加入了“死卡阻断器”。必须先过本地验证脚本或字数格式盲测，未过直接原地自动重跑（Auto-Fix，最大3次）。
+    执行层在出活并上交前，被加入了“死卡阻断器”。必须先过本地验证脚本或字数格式盲测，未过直接原地自动重跑（Auto-Fix，最大3次）。
 *   **🧠 知识自驱飞轮 (Knowledge Flywheel)**
     引入“强制复盘钩子”。一旦系统结项或接收到 `/reset` 内存清空指令，主编排会被拦截并强制抽出卡刀经验，冷凝至 `patterns.md` 成为久期资产。
 *   **🔇 注意力保护池 (Attention Protection)**
@@ -44,7 +44,7 @@ tpr-framework/
 ├── references/                       # 【核心大脑区】运行时加载文档
 │   ├── definition.md                 # TPR 本质是什么
 │   ├── tpr-cognitive.md              # 认知与思考逻辑
-│   ├── tpr-execution.md              # 三省流转机制与自查前置规则
+│   ├── tpr-execution.md              # 三层流转机制与自查前置规则
 │   ├── battle-protocol.md            # 主客分离的争辩审计准则
 │   ├── orchestrator-ops.md           # 注意力保护与知识飞轮守护协议
 │   ├── grv-standard.md               # 契约的量化 Metrics 与交付基线强制约束
