@@ -73,6 +73,8 @@ git clone https://github.com/evan-zhang/tpr-framework.git
 cd ~/.openclaw/skills/tpr-framework/
 git pull origin main
 ```
+**🔔 无感智能升级机制**：
+TPR 框架自带了 `check-update.sh` 防骚扰探针（内置 3 天强制冷却期避免滥用 API 限制）。Agent 会在启动日常 TPR 任务时静默执行巡检。若发现新版本落后，**不会打断工作流**，只会在业务输出结束后附带一段轻量级的 PS 提示（_“💡 TPR 有新版本...”_），等待用户确认后“一键更新”。
 
 ### 3. Agent 技能挂载 (Mount)
 为了让目标 Agent 拥有 TPR 的思考与执行能力，请在它的核心配置文件（如 `AGENTS.md` 或 `SOUL.md`）中，补充类似下述的系统提示词：
