@@ -21,8 +21,8 @@ fi
 # Update the timestamp
 echo $CURRENT_TIME > "$LAST_CHECK_FILE"
 
-# Proceed to installation directory
-DIR=~/.openclaw/skills/tpr-framework
+# Proceed to installation directory (dynamically resolved)
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/.."
 [ -d "$DIR" ] || exit 0
 cd "$DIR" || exit 0
 

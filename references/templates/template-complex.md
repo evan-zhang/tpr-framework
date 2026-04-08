@@ -25,8 +25,8 @@ TPR-YYYYMMDD-NNN/
 │       ├── R001-DEF-01_成果定义与验收标准.md
 │       └── R001-PLAN-01_成果达成规划.md
 ├── 03-battle/
-│   ├── BATTLE-R1-MENXI.md
-│   ├── BATTLE-R1-SHANGSHU.md
+│   ├── BATTLE-R1-AUDITOR.md
+│   ├── BATTLE-R1-EXECUTOR.md
 │   └── DECISION.md
 ├── 04-execution/
 │   └── G001/R001/A001/
