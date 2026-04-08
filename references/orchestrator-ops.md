@@ -32,7 +32,7 @@
 1. **Announce-then-act（同消息）**：说"spawning X"的消息必须包含实际 spawn tool call，不允许"先说下一条再做"
 2. **Notify on spawn**：spawn 成功后立即通知用户："Started: [任务名]（[模型]），预计 X 分钟"
 3. **yield after spawn**：spawn 后立即调用 `sessions_yield`，关闭当前 turn
-4. **Report on result**：sub-agent 返回结果后，立即用自然语言汇报：做了什么、产出在哪里、发现了什么问题。**⚠️ 核心规则：如果产出的是正式交付物（如 DISCOVERY.md、GRV.md、REVIEW.md），编排者在汇报时必须调用发文件工具将实际文档发送给用户。严禁在聊天消息中大段粘贴或"完整打印"文件内容！聊天窗口只用来写简短介绍，看全文必须通过系统下发真实的文件附件。**
+4. **File Delivery Protocol (文件附件化交付铁律)**：无论 sub-agent 是产生了**新文件**（如刚出锅的 DISCOVERY.md 等调研文档），还是你通过 `enableMemorySearch` / Workspace 认知能力帮你翻找定位到了**旧文件/历史资产**，**严禁在小巧的聊天窗口中长篇大论地将内容“全文复制打印”出来，污染群落排版！** 你的聊天语言必须压缩至 5 行以内只写提纲，然后**强制调用文件发送工具**，将目标文档真正当作一个文件附件投递给甲方下载查看！
 
 ### 反面案例
 
