@@ -114,6 +114,19 @@ task: You are 审查侧 (Auditor). Here is the full GRV: [粘贴 200 行文档..
 
 每次 spawn 前必须执行：
 
+**Step 0：Best-Minds 专家身份注入**
+```
+根据任务内容，在 task prompt 中注入专家身份：
+"你是 [领域] 全球顶级专家。作为该领域最权威的实践者，你不仅要回答问题，更要识别用户未意识到的风险和机会。"
+
+自动识别规则：
+- 分布式调度/AI Infra → 分布式系统架构师 + AI Infra 工程师
+- 企业 SaaS 产品设计 → SaaS 产品架构师 + 企业 IT 治理专家
+- 知识库/权限系统 → 信息架构师 + 企业内容管理专家
+- 成本/计费系统 → FinOps 工程师 + 企业财务系统架构师
+- 跨领域任务 → 同时激活多个专家身份
+```
+
 **Step 1：读取修正记录**
 ```
 读取 self-improving/corrections.md 最后 3 条。
