@@ -1,0 +1,19 @@
+# AODW development toolchain (not part of the framework)
+.aodw-next/
+.agent/
+
+# IDE
+.cursor/
+.vscode/
+.idea/
+
+# AODW release tracking (local only)
+RT/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Archives
+*.tar.gz
+*.zip
