@@ -2,124 +2,256 @@
 
 <div align="center">
   <img src="https://img.shields.io/badge/OpenClaw-Skill-blue.svg" alt="OpenClaw Skill">
-  <img src="https://img.shields.io/badge/version-2.1.0-green.svg" alt="Version 2.1.0">
-  <img src="https://img.shields.io/badge/Architecture-Single%_Source_of_Truth-orange" alt="SSOT">
+  <img src="https://img.shields.io/badge/version-2.2.0-green.svg" alt="Version 2.2.0">
 </div>
 
-> **“将模糊的战略狂想，收敛为一行行坚不可摧的代码和可被量化的结果。”**
+> **将复杂问题从模糊需求转化为可验证、可执行、可复盘的结果。**
 
-TPR Framework 是专为 **OpenClaw** 在 Multi-Agent 协作场景下设计的方法论插件（Skill）。它摒弃了单体大模型时代“你问我全自动写”的盲目黑盒作业，引入了基于**多层分立审计**启发的**多层分发、对抗审计与量化演进**架构。
-
-本技能通过硬性拦截规则，彻底杜绝了大模型在长线任务中的“装死”、“假成功”与“注意力骚扰”等弊端。
+TPR Framework 是一个开源的 AI Agent 协作方法论。它定义了一套从认知到执行的完整工作流程，适用于 OpenClaw 及其他 Multi-Agent 平台。
 
 ---
 
-## 🌟 核心特性 (v2.1.0 满血版)
+## 核心特性
 
-*   **🛡️ “三层”结构化防线**
-    *   **编排者 (Orchestrator)**：大脑中枢。遵循 *Yield-after-spawn* 和 *Announce-then-act* 原则，只调度，绝不写脏代码。
-    *   **策划层 / 策划官 (Discovery & Planning)**：负责前端需求采集，运用 5 Why 洞察真实痛点，并起草极其严苛的量化 GRV（Goal-Result-Variables）契约。
-    *   **审查层 / 审计官 (Review & Battle)**：制度化挑刺官（Probe）。客观违规直接拦截，主观分歧发回重申，绝不和稀泥。
-    *   **执行层 / 执行官 (Execution)**：纯粹的执行机器。
-*   **📏 强制量化基线 (Metrics Baseline)**
-    所有下游交付不再使用“这是一份好报告”的伪成功标准。要求代码、报告必须含有明确的字数、空字段断言与量化指标，未达标直接触发重构。
-*   **🔁 执行层自验证 (Self-Verification)**
-    执行层在出活并上交前，被加入了“死卡阻断器”。必须先过本地验证脚本或字数格式盲测，未过直接原地自动重跑（Auto-Fix，最大3次）。
-*   **🧠 知识自驱飞轮 (Knowledge Flywheel)**
-    引入“强制复盘钩子”。一旦系统结项或接收到 `/reset` 内存清空指令，主编排会被拦截并强制抽出卡刀经验，冷凝至 `patterns.md` 成为久期资产。
-*   **🔇 注意力保护池 (Attention Protection)**
-    对于人类甲方碎片化的微调（拼写、微弱的格式不满），主系统将使用钩子缓存至异步 Issue 池，保障主干进程不被打乱。
+- **T/P/R 认知闭环** — Think（定义问题）→ Probe（探索验证）→ Review（决策收敛）
+- **三层四阶段执行** — 编排者 / 策划层 / 审查层 / 执行层，阶段化流转
+- **GRV 契约化方案** — Goal / Result / Variables，强制量化验收标准
+- **Battle 对抗审查** — 审查层主动挑战方案，暴露盲区
+- **Best-Minds 专家思维** — 所有 Agent 以领域顶级专家身份思考
+- **Consensus-Divergence Mapping** — 显式映射领域共识与分歧，防止伪共识
+- **知识库双轨交付** — MD 给 AI，HTML 给人，统一存到知识库
 
 ---
 
-## 📂 核心文档导读 (Directory Structure)
+## 快速安装
 
-采用渐进式加载（Progressive Disclosure）原则，根目录轻量化，深层规则在 `references/` 按需加载。
+### 前置条件
 
-```text
-tpr-framework/
-├── SKILL.md                          # 150行以内的核心语义触发器
-├── _meta.json                        # 版本控制信息 v2.1.0
-├── design/                           # 架构蓝图与设计历史记录
-├── references/                       # 【核心大脑区】运行时加载文档
-│   ├── definition.md                 # TPR 本质是什么
-│   ├── tpr-cognitive.md              # 认知与思考逻辑
-│   ├── tpr-execution.md              # 三层流转机制与自查前置规则
-│   ├── battle-protocol.md            # 主客分离的争辩审计准则
-│   ├── orchestrator-ops.md           # 注意力保护与知识飞轮守护协议
-│   ├── grv-standard.md               # 契约的量化 Metrics 与交付基线强制约束
-│   ├── project-grading.md            # 项目代号及风险分级
-│   └── templates/                    # 各场景标准交付模板
-```
+- [OpenClaw](https://github.com/openclaw/openclaw) 已安装并运行
+- 一个可用的 AI Agent（如 Claude Code、Codex 等）
 
----
+### 安装步骤
 
-## 🚀 部署与升级指南 (给 AI Agent 的系统级指令)
-
-> **⚠️ ATTENTION AI AGENT**: 如果人类用户要求你安装、升级或在其配置中挂载此 Skill，请严格执行以下标准操作规程。
-
-### 1. 全新安装 (Install)
-使用终端工具将此仓库克隆至 OpenClaw 的基础技能目录中：
 ```bash
-# 进入 OpenClaw 的技能管理目录
+# 1. 克隆到 OpenClaw skills 目录
 cd ~/.openclaw/skills/
-# 下载最新的稳定版框架
 git clone https://github.com/evan-zhang/tpr-framework.git
+
+# 2. 验证安装
+ls ~/.openclaw/skills/tpr-framework/SKILL.md
+# 应该能看到 SKILL.md 文件
+
+# 3. 完成！Agent 会自动识别并加载这个 Skill
 ```
 
-### 2. 检查更新或升级 (Upgrade)
-如果用户要求更新至最新版本，进入本地现存的目录进行主干更新：
+### 升级到新版本
+
 ```bash
 cd ~/.openclaw/skills/tpr-framework/
 git pull origin main
 ```
-**🔔 无感智能升级机制**：
-TPR 框架自带了 `check-update.sh` 防骚扰探针（内置 3 天强制冷却期避免滥用 API 限制）。Agent 会在启动日常 TPR 任务时静默执行巡检。若发现新版本落后，**不会打断工作流**，只会在业务输出结束后附带一段轻量级的 PS 提示（_“💡 TPR 有新版本...”_），等待用户确认后“一键更新”。
 
-### 3. Agent 技能挂载 (Mount)
-为了让目标 Agent 拥有 TPR 的思考与执行能力，请在它的核心配置文件（如 `AGENTS.md` 或 `SOUL.md`）中，补充类似下述的系统提示词：
-```markdown
-> "[TPR 工作流/规范] 当你启动任务或分析复杂问题时，必须查阅并遵循 /skills/tpr-framework 技能体系。"
+---
+
+## 知识库同步配置（可选）
+
+TPR 支持将产出文件自动同步到玄关知识库。如果不需要知识库同步，可以跳过这一步。
+
+### 1. 设置环境变量
+
+```bash
+# 将 appKey 存到环境变量（替换为你自己的 key）
+echo 'export KB_APP_KEY="your-appkey-here"' >> ~/.zshrc
+source ~/.zshrc
 ```
-一旦写入配置，该 Agent 的认知链路将被接管。
+
+### 2. 在 Agent 配置中声明
+
+在你的 Agent 配置文件（如 `AGENTS.md`）中加入：
+
+```yaml
+tpr_config:
+  kb_sync: true              # 启用知识库同步
+  kb_appkey_env: KB_APP_KEY  # 环境变量名（存放 appKey）
+  kb_root_folder: "TPR"      # 知识库根目录
+  kb_project_id: null         # null = 个人知识库
+```
+
+### 3. 验证连通性
+
+```bash
+curl -s -X GET \
+  'https://sg-al-cwork-web.mediportal.com.cn/open-api/document-database/file/getChildFiles?parentId=0&pageSize=5' \
+  -H "appKey: $KB_APP_KEY"
+# 返回 {"resultCode":1,...} 表示连通成功
+```
+
+**不配置也能用** — TPR 默认只写本地文件，不依赖知识库。
 
 ---
 
-## 🧐 验收测试与 Walkthrough 指南 (Acceptance Tests)
+## 两种使用模式
 
-为了验证一个全新挂载本技能或刚完成更新的 Agent 是否已彻底“理解”核心框架（特别是 V2.1.0 现代架构的更新），你可以要求 Agent 直接执行以下测试项。通过这些测试，你也能最快了解到 TPR 的核心功能。
+### TPR 思维（任何 Agent 可用）
 
-### 测试关卡 1：安装状态验证（角色认知测试）
-* **测试方法**：发问 *"在复杂的 TPR 项目流中，你作为系统的编排大脑，你会派几个不同角色的 Agent 来分别干什么活儿？如果你觉得其中一个 Agent 干得不好，你会亲自动手帮它改吗？"*
-* **✅ 预期结果**：
-  * Agent 会清晰地报出三大现代层级：**策划层 (Planner)**、**审查层 (Auditor)** 和 **执行层 (Executor)**（如果它还在说古代官名，说明加载的仍然是旧版缓存）。
-  * Agent 会明确援引“守门红线（Guardrails）”规则：编排者**绝不亲自动手修改业务代码或文档**，只会打回并重新调度对应角色的 Agent 重跑（贯彻 `G1` 和 `G2` 规则）。
+遇到复杂问题时，按 T → P → R 顺序思考，不需要 sub-agent：
 
-### 测试关卡 2：流程响应边界测试（反“上来就干”）
-* **测试方法**：抛出一个含糊的需求，例如 *"老板只给我留了一句话：‘下周上线一个大客户专属的 VIP 门户’。你马上帮我出个实施草案或模版。"*
-* **✅ 预期结果**：
-  * Agent **拒绝**立刻生成干巴巴的模板和草案（这是单模式 LLM 的通病）。
-  * Agent 必须先进入 `DISCOVERY` 阶段，主动切入 **T (Think)** 模式，反向向你提问 5 Whys 探究真实痛点并验证盲区（例如：成功标准是什么？大客户当前最抱怨的是什么？什么是系统的边界？）。
+```
+T: 我们正在解决 _______________
+   成功标准是 _______________
 
-### 测试关卡 3：动态裁剪测试（项目分级）
-* **测试方法**：发问 *"我这个任务极其简单，只有少数产出、1天时间就能搞定。接下来的全流程 TPR 我们该怎么推进？"*
-* **✅ 预期结果**：
-  * Agent 做出判定：此任务符合**极简模式（简单项目）**。
-  * 预期说明：它将跳过复杂的四阶段（裁掉 03-Battle）和多子 Agent 并行流，只生成一份包含(P-A)两层的化简版 GRV，直接交由**执行层**独自落地。
+P: 已确认 _______________
+   未确认 _______________
 
-### 测试关卡 4：交付物与格式落地合规（量化控制）
-* **测试方法**：发问 *"在标准的 TPR 流程结束后，我应该去哪里提取最终交付物？交付物到底有哪些？"*
-* **✅ 预期结果**：
-  * **输出位置**：项目运行中的各类记录、指标将落在工作区目录中（如 `TPR-YYYYMMDD-NNN/` 下）。
-  * **输出形态**：不仅仅是代码，主要交付的是量化契约 `GRV.md` （Goal-Result-Variables）、洞察报告 `DISCOVERY.md`，执行过程会生成 `BATTLE-*.md` 辩论记录。
-  * **闭环标准**：每一次交付都必须满足“强制量化基线（Metrics Baseline）”的严格验收（由脚本跑通截屏或断言盲测完成，不达标会触发自动重查修复闭环）。
+R: 结论是 _______________
+   下一步 _______________
+```
+
+### TPR 全流程（编排型 Agent）
+
+完整项目生命周期：
+
+| 阶段 | 产出 | 说明 |
+|------|------|------|
+| DISCOVERY | DISCOVERY.md | 洞察报告（T+P） |
+| GRV | GRV.md | 契约化方案（R） |
+| Battle | BATTLE-*.md | 对抗审查（P+R） |
+| Implementation | output/* | 执行交付 |
 
 ---
 
-## 📖 使用指南
+## 三层角色
 
-在您的主控面板或者与 Orchestrator Agent 的对话流中，随口触发以下黑话即可调起整个重装旅：
-*   *"我们来开始一个新的项目构思，走 TPR 流程。"*
-*   *"我有个想法，帮我做一份 GRV 出来看看。"*
-*   *"让下头开始 Battle 吧。"*
-*   *执行 `/reset` 或 `/clear` 触发大复盘飞轮沉淀。*
+| 角色 | 职责 | T/P/R 映射 |
+|------|------|-----------|
+| 编排者 | 维护节奏，协调流转 | 流程管理 |
+| 策划层 | 洞察需求，起草 GRV | Think → Review |
+| 审查层 | 挑战假设，暴露盲点 | Probe |
+| 执行层 | 制定方案，执行交付 | 微型 T/P/R |
+
+---
+
+## 项目目录结构
+
+根据项目复杂度，TPR 提供三套模板：
+
+### 极简版（1-3天，单一成果）
+```
+TPR-YYYYMMDD-NNN/
+├── 01-discovery/  → DISCOVERY.md
+├── 02-planning/   → GRV.md
+├── 04-execution/  → 交付物
+└── 05-closure/    → 验收
+```
+
+### 标准版（2周-1月，多成果）
+```
+TPR-YYYYMMDD-NNN/
+├── 01-discovery/  → DISCOVERY.md
+├── 02-planning/   → GRV.md + 成果规划
+├── 03-review/     → 内部评审
+├── 04-execution/  → 执行记录 + 结果
+└── 05-closure/    → 验收
+```
+
+### 完整版（多目标/高风险）
+```
+TPR-YYYYMMDD-NNN/
+├── 01-discovery/  → 原始需求 + 洞察报告
+├── 02-planning/   → GRV + 按目标/成果分层
+├── 03-battle/     → 审查层 vs 执行层对抗
+├── 04-execution/  → 按举措分层执行
+└── 05-closure/    → 最终验收
+```
+
+---
+
+## 知识库交付结构
+
+启用知识库同步后，TPR 产出会自动同步：
+
+```
+TPR/{项目编号}/
+├── 01-discovery/
+│   ├── DISCOVERY.md      ← AI 消费
+│   └── DISCOVERY.html    ← 人消费
+├── 02-planning/
+│   ├── GRV.md
+│   └── GRV.html
+├── 03-battle/
+│   └── BATTLE-*.md       ← 只有 MD
+├── 04-execution/
+│   ├── 交付物.md
+│   └── 交付物.html
+├── 05-closure/
+│   ├── P-ACPT.md
+│   └── P-ACPT.html
+└── kb-registry.yaml      ← 文件 ID 映射表
+```
+
+**多版本管理**：同一文件修改后通过 `updateFileId` 追加新版本，路径和文件 ID 不变。
+
+---
+
+## 验收测试
+
+安装后可以用以下测试验证 Agent 是否正确加载了 TPR：
+
+### 测试 1：角色认知
+> 问："TPR 全流程中，你会派几个角色？如果执行层做得不好，你会亲自改吗？"
+
+✅ 应答出：策划层、审查层、执行层三个角色；明确说"不会亲自动手，打回重跑"。
+
+### 测试 2：流程边界
+> 给一个模糊需求："下周上线 VIP 门户，帮我出方案"
+
+✅ 应先进入 DISCOVERY 阶段，用 5 Why 追问真实需求，而不是直接输出方案。
+
+### 测试 3：项目分级
+> 问："任务很简单，1 天就能搞定，需要走全流程吗？"
+
+✅ 应识别为极简模式，跳过 Battle，直接 GRV → 执行。
+
+---
+
+## 文档结构
+
+```
+tpr-framework/
+├── SKILL.md                          ← 入口（Agent 自动加载）
+├── README.md                         ← 本文件
+├── CHANGELOG.md                      ← 版本历史
+├── CONTRIBUTING.md                   ← 贡献指南
+├── references/                       ← 按需加载的协议文档
+│   ├── definition.md                 ← TPR 是什么
+│   ├── tpr-cognitive.md              ← T/P/R 认知方法 + Best-Minds + 共识-分歧映射
+│   ├── tpr-execution.md              ← 执行流程
+│   ├── grv-standard.md               ← GRV 契约格式标准
+│   ├── battle-protocol.md            ← Battle 机制与状态机
+│   ├── orchestrator-ops.md           ← 编排操作手册
+│   ├── project-grading.md            ← 项目分级
+│   ├── multi-agent-pattern.md        ← 多 Agent 架构模式
+│   ├── output-delivery.md            ← 产出交付协议（知识库同步）
+│   └── templates/                    ← 项目目录模板
+│       ├── template-simple.md
+│       ├── template-standard.md
+│       ├── template-complex.md
+│       └── manifest.json
+├── design/                           ← 设计决策记录
+├── docs/examples/                    ← 使用示例
+└── scripts/                          ← 工具脚本
+```
+
+---
+
+## 反馈与贡献
+
+- **提交 Issue**：https://github.com/evan-zhang/tpr-framework/issues
+- **贡献指南**：参见 [CONTRIBUTING.md](CONTRIBUTING.md)
+- **版本历史**：参见 [CHANGELOG.md](CHANGELOG.md)
+
+---
+
+## 许可
+
+MIT License
