@@ -20,6 +20,7 @@
 | G6 | 文件锁 | 不并行 spawn 写同一文件的 sub-agent |
 | G7 | 文件必须发送 | 写完文件后必须通过消息发送给用户 |
 | G8 | 模型降级不接手 | model 429 时用备选模型重派 sub-agent，不自己做 |
+| G9 | 产出即交付 | 每个阶段完成后，立即按产出交付协议同步到知识库（详见 `references/output-delivery.md`） |
 
 ---
 
@@ -220,5 +221,18 @@ sub-agent 任务 prompt 中必须明确说明：
 
 ---
 
-*版本：2.0.0*
-*创建：2026-04-07*
+## 产出交付集成
+
+每个阶段完成后，编排者必须按 `references/output-delivery.md` 的协议执行知识库同步：
+
+1. **检查 kb-registry.yaml**：确认该文件的 fileId 是否已存在
+2. **上传/更新**：有 fileId 则版本更新，没有则新建
+3. **HTML 版本**：关键文件（DISCOVERY、GRV、交付物、验收）额外生成 HTML 并上传
+4. **更新映射表**：同步更新 kb-registry.yaml 并推送到知识库
+
+**编排者不负责生成 HTML 内容**——编排者 spawn 独立的 sub-agent 执行 HTML 生成，或在派遣执行层时在 task 中包含 HTML 生成指令。
+
+---
+
+*版本：2.2.0*
+*更新：2026-05-13*

@@ -163,4 +163,5 @@ R: 结论是 _______________
 | 初始化项目目录 | references/templates/ | 全流程 |
 | 编排操作 / 派遣 sub-agent | references/orchestrator-ops.md | 全流程 |
 | 设计多 Agent 架构 | references/multi-agent-pattern.md | 全流程 |
+| 产出交付到知识库 | references/output-delivery.md | 全流程 |
 | Implementation 阶段 | references/tpr-execution.md § Implementation | 全流程 |
