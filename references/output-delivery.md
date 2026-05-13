@@ -257,11 +257,104 @@ files:
 
 ---
 
+## 知识库读取能力
+
+TPR 不只是写入知识库，也需要从知识库中读取历史项目和相关文档。
+
+### 读取场景
+
+| 场景 | 时机 | 用途 |
+|------|------|------|
+| 浏览已有项目 | DISCOVERY 开始前 | 了解历史项目，避免重复工作 |
+| 读取历史 GRV | 新项目策划时 | 参考类似项目的契约结构 |
+| 读取项目文件 | 恢复中断的项目 | 跨 session 恢复上下文 |
+| 搜索相关知识 | DISCOVERY 阶段 | 查找与当前项目相关的已有资料 |
+
+### 接口使用
+
+#### 1. 列出 TPR 目录下的项目
+
+```bash
+curl -s -X GET \
+  'https://sg-al-cwork-web.mediportal.com.cn/open-api/document-database/file/searchFile?keyword=TPR&pageSize=50' \
+  -H 'appKey: {从环境变量读取}'
+```
+
+或按目录浏览（需要先知道 TPR 目录的 fileId）：
+
+```bash
+curl -s -X GET \
+  'https://sg-al-cwork-web.mediportal.com.cn/open-api/document-database/file/getChildFiles?parentId={TPR目录fileId}&pageSize=50' \
+  -H 'appKey: {从环境变量读取}'
+```
+
+返回结果中每个项目是一个文件夹，包含 `fileId`、`fileName`、`fileType` 等信息。
+
+#### 2. 列出项目内的文件
+
+```bash
+curl -s -X GET \
+  'https://sg-al-cwork-web.mediportal.com.cn/open-api/document-database/file/getChildFiles?parentId={项目fileId}&pageSize=50' \
+  -H 'appKey: {从环境变量读取}'
+```
+
+递归浏览直到找到目标文件。
+
+#### 3. 读取文件全文（AI 首选）
+
+```bash
+curl -s -X GET \
+  'https://sg-al-cwork-web.mediportal.com.cn/open-api/document-database/file/getFullFileContent?fileId={文件fileId}' \
+  -H 'appKey: {从环境变量读取}'
+```
+
+返回提纯的 Markdown 全文，可直接用于 Agent 上下文。
+
+#### 4. 批量读取多个文件
+
+```bash
+curl -s -X POST \
+  'https://sg-al-cwork-web.mediportal.com.cn/open-api/document-database/ai/batchGetContent' \
+  -H 'appKey: {从环境变量读取}' \
+  -H 'Content-Type: application/json' \
+  -d '{"files":[{"fileId":30001},{"fileId":30002}]}'
+```
+
+建议单次不超过 10 个文件。
+
+#### 5. 搜索相关文档
+
+```bash
+curl -s -X GET \
+  'https://sg-al-cwork-web.mediportal.com.cn/open-api/document-database/file/searchFile?keyword={关键词}&pageSize=20' \
+  -H 'appKey: {从环境变量读取}'
+```
+
+### 读取检查清单
+
+编排者在以下时点应主动读取知识库：
+
+**DISCOVERY 开始前**：
+- [ ] 列出 TPR 目录下的已有项目
+- [ ] 搜索与当前需求相关的关键词
+- [ ] 如有相关历史项目，读取其 GRV.md 作为参考
+
+**恢复中断项目时**：
+- [ ] 读取 kb-registry.yaml 获取 fileId 映射
+- [ ] 读取最新阶段的文件，恢复上下文
+- [ ] 通知用户："已从知识库恢复项目 {项目编号}"
+
+**Battle 阶段**：
+- [ ] 审查层可读取历史项目的 Battle 记录，参考常见异议点
+
+---
+
 ## 错误处理
 
 | 场景 | 处理 |
 |------|------|
 | uploadContent 返回 resultCode ≠ 1 | 重试 1 次，仍失败则报告错误，不阻塞流程 |
+| 读取返回空内容 | 文件可能还在异步解析中，等待 3 秒重试 |
 | fileId 映射表丢失 | 按 folderName + fileName 查询知识库，恢复 fileId |
 | HTML 生成失败 | 只交付 MD 版本，告知用户 HTML 版本待补充 |
 | appKey 无效 | 立即停止交付，报告用户 |
