@@ -4,6 +4,43 @@
 
 ---
 
+## 前置检查：是否启用知识库同步
+
+在执行任何交付操作前，编排者必须先检查配置：
+
+### Step 0：读取配置
+
+从当前 Agent 的 AGENTS.md 中读取 `tpr_config` 配置块。
+
+```yaml
+# 示例配置（在 Agent 的 AGENTS.md 中声明）
+tpr_config:
+  kb_sync: true
+  kb_appkey_env: KB_APP_KEY
+  kb_root_folder: "TPR"
+  kb_project_id: null
+```
+
+### Step 1：判定行为
+
+```
+检查 tpr_config 是否存在
+ ├─ 不存在 → 本地模式（只写本地文件，不触知识库）
+ │
+ ├─ kb_sync = false 或未设置 → 本地模式
+ │
+ ├─ kb_sync = true
+ │   ├─ kb_appkey_env 未设置 → 报错，降级为本地模式
+ │   ├─ process.env[kb_appkey_env] 为空 → 报错，降级为本地模式
+ │   └─ 配置合法 → 知识库模式（本地文件 + 知识库同步）
+ │
+ └─ 配置异常 → 报错，降级为本地模式
+```
+
+**降级原则**：任何配置问题都不阻塞 TPR 主流程。先完成本地文件，再报告配置错误。
+
+---
+
 ## 核心原则
 
 **双轨交付，统一存储**：
@@ -19,7 +56,7 @@
 ### 知识库目录结构
 
 ```
-TPR/{项目编号}/
+{kb_root_folder}/{项目编号}/
 ├── 01-discovery/
 │   ├── DISCOVERY.md           ← AI 消费
 │   └── DISCOVERY.html         ← 人消费（关键文件才生成 HTML）
@@ -32,8 +69,10 @@ TPR/{项目编号}/
 ├── 04-execution/
 │   ├── A001-OUT-01.md
 │   └── A001-OUT-01.html       ← 最终交付物生成 HTML
-└── 05-closure/
-    └── P-ACPT-01.md
+├── 05-closure/
+│   ├── P-ACPT-01.md
+│   └── P-ACPT-01.html
+└── kb-registry.yaml           ← 文件 ID 映射表（知识库版本管理核心）
 ```
 
 ### 哪些文件生成 HTML
@@ -56,20 +95,23 @@ TPR/{项目编号}/
 | 配置项 | 值 |
 |--------|-----|
 | API 基地址 | `https://sg-al-cwork-web.mediportal.com.cn/open-api` |
-| 鉴权 | Header `appKey` |
+| 鉴权 | Header `appKey`，值从 `process.env[tpr_config.kb_appkey_env]` 读取 |
 | 核心接口 | `POST /document-database/file/uploadContent` |
+| 目标空间 | `tpr_config.kb_project_id`（null = 个人知识库） |
+| 根目录 | `tpr_config.kb_root_folder`（默认 "TPR"） |
 
 ### 新建文件
 
 ```bash
 curl -X POST 'https://sg-al-cwork-web.mediportal.com.cn/open-api/document-database/file/uploadContent' \
-  -H 'appKey: {APP_KEY}' \
+  -H 'appKey: {从环境变量读取}' \
   -H 'Content-Type: application/json' \
   -d '{
     "content": "{MD 或 HTML 内容}",
     "fileName": "DISCOVERY",
     "fileSuffix": "md",
-    "folderName": "TPR/TPR-20260513-001/01-discovery"
+    "folderName": "{kb_root_folder}/{项目编号}/01-discovery",
+    "projectId": "{kb_project_id，null则不传}"
   }'
 ```
 
@@ -79,7 +121,7 @@ curl -X POST 'https://sg-al-cwork-web.mediportal.com.cn/open-api/document-databa
 
 ```bash
 curl -X POST 'https://sg-al-cwork-web.mediportal.com.cn/open-api/document-database/file/uploadContent' \
-  -H 'appKey: {APP_KEY}' \
+  -H 'appKey: {从环境变量读取}' \
   -H 'Content-Type: application/json' \
   -d '{
     "content": "{更新后的内容}",

@@ -139,6 +139,42 @@ R: 结论是 _______________
 | can_spawn | 是否能派生 sub-agent | true / false |
 | model_config | 模型配置文件路径 | config/tpr-model-config.md |
 
+### 知识库同步配置
+
+如果需要将 TPR 产出自动同步到知识库，在 AGENTS.md 中声明以下配置：
+
+```yaml
+# TPR 知识库同步配置
+tpr_config:
+  kb_sync: true              # 是否启用知识库同步（默认 false）
+  kb_appkey_env: KB_APP_KEY  # 存放 appKey 的环境变量名（不硬编码密钥）
+  kb_root_folder: "TPR"      # 知识库根目录（默认 "TPR"）
+  kb_project_id: null         # 项目空间 ID（null = 个人知识库）
+```
+
+**配置说明**：
+
+| 配置项 | 必填 | 默认值 | 说明 |
+|--------|------|--------|------|
+| kb_sync | 否 | false | true = 每阶段完成后自动同步；false 或未配置 = 只写本地文件 |
+| kb_appkey_env | 是* | - | 环境变量名，编排者从 `process.env[kb_appkey_env]` 取 appKey（*kb_sync=true 时必填） |
+| kb_root_folder | 否 | "TPR" | 知识库中的根目录名，支持多级如 "项目文档/TPR" |
+| kb_project_id | 否 | null | 项目空间 ID。null 或不传 = 同步到个人知识库 |
+
+**判定逻辑**：
+1. 检查 AGENTS.md 是否有 `tpr_config` 配置块
+2. `kb_sync = true` → 每个阶段完成后触发知识库同步
+3. `kb_sync = false` 或无配置 → 只写本地文件，TPR 正常运行不受影响
+4. 配置缺失但 kb_sync=true → 报错并降级为本地模式
+
+**目录规则**：
+```
+{kb_root_folder}/{项目编号}/{阶段编号}-{阶段名}/
+例：TPR/TPR-20260513-001/01-discovery/
+```
+
+> ⚠️ **安全原则**：appKey 只存环境变量，永不硬编码到配置文件或代码中。
+
 ---
 
 ## 🔄 智能更新守护进程 (Update Daemon)
