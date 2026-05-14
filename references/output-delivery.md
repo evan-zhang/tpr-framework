@@ -2,13 +2,13 @@
 
 > 本文档回答一个问题：**TPR 产出文件写到哪里，命名规范是什么。**
 >
-> 同步由 `openclaw-xgkb-sync` 服务自动处理，详见 SKILL.md 同步配置章节。
+> 同步由 `openclaw-xgkb-sync` 服务自动处理，详见 SKILL.md。
 
 ---
 
 ## 目录结构
 
-每个 TPR 项目对应本地一个 RT 目录，结构如下：
+每个 TPR 项目对应本地一个目录，结构如下：
 
 ```
 {RT根目录}/
@@ -79,7 +79,6 @@
 ### DISCOVERY 完成后
 - [ ] `DISCOVERY.md` 已写入本地目录
 - [ ] 如需 HTML，`DISCOVERY.html` 已生成
-- [ ] 如启用了 kb_sync，mapping 已注册（SKILL.md § 初始化步骤）
 
 ### GRV 完成后
 - [ ] `GRV.md` 已写入本地目录
@@ -96,21 +95,18 @@
 
 ### Closure 完成后
 - [ ] `P-ACPT-{nn}.md` 已写入
-- [ ] 如启用了 kb_sync，注销 mapping（SKILL.md § 终止步骤）
 - [ ] 通知用户：项目完成，文件路径
 
 ---
 
 ## 同步说明
 
-**所有文件写入本地目录后，同步由 `openclaw-xgkb-sync` 服务自动处理。**
+**编排者只管写本地文件，同步由 `openclaw-xgkb-sync` 服务自动处理。**
 
-- 服务每 120s 自动扫描一次本地目录，将变更推送到知识库
-- TPR 无需在每次阶段完成时手动触发同步
-- 如需立即同步，调用 `POST /sync/{mappingId}`（不强制）
-- 知识库路径：`TPR/{项目编号}/`
+- 服务每 120s 自动扫描本地目录，双向同步（bidirectional）
+- TPR 编排者无需参与任何同步操作
 
 ---
 
-*版本：3.0.0*
-*更新：2026-05-14 — 同步由 openclaw-xgkb-sync 服务处理，文档大幅精简*
+*版本：3.1.0*
+*更新：2026-05-14 — 按 issue #5：删除动态注册/注销 mapping 逻辑，改为纯全局 mapping 方案*

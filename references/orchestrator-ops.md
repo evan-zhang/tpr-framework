@@ -223,16 +223,17 @@ sub-agent 任务 prompt 中必须明确说明：
 
 ## 产出交付集成
 
-每个阶段完成后，编排者必须按 `references/output-delivery.md` 的协议执行知识库同步：
+每个阶段完成后，编排者只需确保文件已写入本地项目目录（`rt_root_dir`）。**同步由 `openclaw-xgkb-sync` 服务自动处理，编排者不参与同步逻辑。**
 
-1. **检查 kb-registry.yaml**：确认该文件的 fileId 是否已存在
-2. **上传/更新**：有 fileId 则版本更新，没有则新建
-3. **HTML 版本**：关键文件（DISCOVERY、GRV、交付物、验收）额外生成 HTML 并上传
-4. **更新映射表**：同步更新 kb-registry.yaml 并推送到知识库
+1. **写本地文件** — 编排者或 sub-agent 将产出写入 `{rt_root_dir}/{项目编号}/` 下的对应文件
+2. **自动同步** — `openclaw-xgkb-sync` 每 120 秒扫描本地目录，自动将变更推送到知识库（bidirectional）
+3. **HTML 版本** — 关键文件（DISCOVERY、GRV、交付物、验收）额外生成 HTML，一并写入本地目录，同步服务自动上传
 
 **编排者不负责生成 HTML 内容**——编排者 spawn 独立的 sub-agent 执行 HTML 生成，或在派遣执行层时在 task 中包含 HTML 生成指令。
 
+**核心原则**：编排者和同步服务完全解耦——编排者只管写文件，同步服务只管搬运。
+
 ---
 
-*版本：2.2.0*
-*更新：2026-05-13*
+*版本：2.3.0*
+*更新：2026-05-14 — 按 issue #5：删除 kb-registry.yaml 上传逻辑，改为编排者只写本地文件*
