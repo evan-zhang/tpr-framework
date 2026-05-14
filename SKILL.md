@@ -141,39 +141,112 @@ R: 结论是 _______________
 
 ### 知识库同步配置
 
-如果需要将 TPR 产出自动同步到知识库，在 AGENTS.md 中声明以下配置：
+TPR 通过调用 `openclaw-xgkb-sync` 同步服务（独立 Node.js 后台进程）将产出同步到玄关知识库。
+
+> **前提**：`openclaw-xgkb-sync` 服务已部署并常驻运行（默认 `http://127.0.0.1:9090`）。详见 [openclaw-xgkb-sync](https://github.com/xgjk/openclaw-xgkb-sync)。
+
+**AGENTS.md 配置声明**（kb_sync 启用时才需要）：
 
 ```yaml
 # TPR 知识库同步配置
 tpr_config:
-  kb_sync: true              # 是否启用知识库同步（默认 false）
-  kb_appkey_env: KB_APP_KEY  # 存放 appKey 的环境变量名（不硬编码密钥）
-  kb_root_folder: "TPR"      # 知识库根目录（默认 "TPR"）
-  kb_project_id: null         # 项目空间 ID（null = 个人知识库）
-```
+  kb_sync: true               # 是否启用知识库同步（默认 false）
+  sync_service_url: "http://127.0.0.1:9090"  # openclaw-xgkb-sync HTTP API 地址
+  kb_root_folder: "TPR"     # 知识库根目录，mapping 的 remoteRootFolderPath 前缀
 
-**配置说明**：
+# TPR 项目根目录配置
+rt_root_dir: "~/.openclaw/gateways/life/domains/aodw_codex/workspace/projects"  # 本地 RT 目录所在根目录
+```
 
 | 配置项 | 必填 | 默认值 | 说明 |
 |--------|------|--------|------|
-| kb_sync | 否 | false | true = 每阶段完成后自动同步；false 或未配置 = 只写本地文件 |
-| kb_appkey_env | 是* | - | 环境变量名，编排者从 `process.env[kb_appkey_env]` 取 appKey（*kb_sync=true 时必填） |
-| kb_root_folder | 否 | "TPR" | 知识库中的根目录名，支持多级如 "项目文档/TPR" |
-| kb_project_id | 否 | null | 项目空间 ID。null 或不传 = 同步到个人知识库 |
+| kb_sync | 否 | false | true = 启用知识库同步；false = 只写本地文件 |
+| sync_service_url | 否 | `http://127.0.0.1:9090` | openclaw-xgkb-sync 的 HTTP 管理 API 地址 |
+| kb_root_folder | 否 | "TPR" | 知识库中的根目录前缀，如 `"TPR"` |
 
-**判定逻辑**：
-1. 检查 AGENTS.md 是否有 `tpr_config` 配置块
-2. `kb_sync = true` → 每个阶段完成后触发知识库同步
-3. `kb_sync = false` 或无配置 → 只写本地文件，TPR 正常运行不受影响
-4. 配置缺失但 kb_sync=true → 报错并降级为本地模式
+---
 
-**目录规则**：
+#### 初始化步骤：注册 mapping（每个新项目执行一次）
+
+当 `kb_sync = true` 时，TPR 在**新项目激活时**（即用户确认开始 TPR 全流程后）必须执行以下步骤，向同步服务注册该项目的 mapping：
+
+**Step 1：检查服务可用性**
+
+```bash
+curl -s http://127.0.0.1:9090/health
 ```
-{kb_root_folder}/{项目编号}/{阶段编号}-{阶段名}/
-例：TPR/TPR-20260513-001/01-discovery/
+
+若返回非 200 或服务未运行，立即降级为本地模式（只写文件，不同步），并告知用户同步服务未就绪。
+
+**Step 2：注册 mapping**
+
+```bash
+curl -X POST http://127.0.0.1:9090/mappings \
+  -H "Content-Type: application/json" \
+  -d '{
+    "mappingId": "tpr-{项目编号}",
+    "localRoot": "{本地RT目录的绝对路径}",
+    "remoteRootFolderPath": "{kb_root_folder}/{项目编号}",
+    "filePatterns": ["**/*.md"],
+    "excludePatterns": ["**/.git/**"]
+  }'
 ```
 
-> ⚠️ **安全原则**：appKey 只存环境变量，永不硬编码到配置文件或代码中。
+**字段填写规则**：
+
+| 字段 | 值 | 示例 |
+|------|---|------|
+| mappingId | `tpr-{项目编号}` | `tpr-TPR-20260514-001` |
+| localRoot | 本地 RT 目录的绝对路径（不含 RT 子目录） | `/Users/evan/.openclaw/.../workspace/projects/tpr-framework/RT` |
+| remoteRootFolderPath | `{kb_root_folder}/{项目编号}` | `TPR/TPR-20260514-001` |
+| filePatterns | `["**/*.md"]` | — |
+| excludePatterns | `["**/.git/**"]` | — |
+
+**Step 3：验证注册结果**
+
+```bash
+curl -s http://127.0.0.1:9090/mappings
+```
+
+确认新 mapping 出现在列表中，且 `enabled: true`。
+
+**Step 4：触发首次同步**
+
+```bash
+curl -X POST http://127.0.0.1:9090/sync/{mappingId}
+```
+
+---
+
+#### 同步时机
+
+mapping 注册后，`openclaw-xgkb-sync` 服务会在 `autoSyncIntervalSec`（默认 120s）内自动定时同步。TPR 无需在每次阶段完成时手动触发——文件写入本地目录后，服务自动推送到知识库。
+
+---
+
+#### 终止步骤：注销 mapping（项目结束时执行一次）
+
+TPR 项目完成（Closure 阶段）后，如需注销该项目的 mapping：
+
+```bash
+curl -X DELETE http://127.0.0.1:9090/mappings/tpr-{项目编号}
+```
+
+> ⚠️ 注销 mapping 后，该本地目录的变更不再同步到知识库，但知识库中已有的文件不受影响。
+
+---
+
+#### 降级原则
+
+| 场景 | 行为 |
+|------|------|
+| kb_sync = false 或未配置 | 只写本地文件，不触知识库 |
+| kb_sync = true 但同步服务不可用 | 降级为本地模式，告知用户 |
+| POST /mappings 失败 | 降级为本地模式，继续工作，报告用户 |
+
+**核心原则**：同步失败不阻塞 TPR 主流程。本地文件优先。
+
+> ⚠️ **安全原则**：appKey 不经过 TPR——服务已配置好 appKey，TPR 只操作 mapping，不接触密钥。
 
 ---
 
@@ -199,5 +272,5 @@ tpr_config:
 | 初始化项目目录 | references/templates/ | 全流程 |
 | 编排操作 / 派遣 sub-agent | references/orchestrator-ops.md | 全流程 |
 | 设计多 Agent 架构 | references/multi-agent-pattern.md | 全流程 |
-| 产出交付到知识库 | references/output-delivery.md | 全流程 |
+| 产出交付规范 | references/output-delivery.md | 全流程 |
 | Implementation 阶段 | references/tpr-execution.md § Implementation | 全流程 |
