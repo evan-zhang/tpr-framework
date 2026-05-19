@@ -241,5 +241,4 @@ R: 结论是 _______________
 | 产出交付规范 | references/output-delivery.md | 全流程 |
 | Implementation 阶段 | references/tpr-execution.md § Implementation | 全流程 |
 | 安装后配置 | references/setup.md | 通用 |
-| 知识库同步 | references/setup-sync.md | 全流程 |
 | 智能更新守护进程 | references/update-daemon.md | 通用 |

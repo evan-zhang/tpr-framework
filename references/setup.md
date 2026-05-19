@@ -7,6 +7,5 @@
 | tpr_mode | 使用模式 | cognitive / full |
 | can_spawn | 是否能派生 sub-agent | true / false |
 | rt_root_dir | 本地 RT 项目目录的根路径 | ~/.openclaw/.../workspace/projects |
-| sync_service_url | 同步服务 HTTP API 地址（详见 references/setup-sync.md） | http://127.0.0.1:9090 |
 
 > 详细的安装指引见项目根目录 [INSTALL.md](../INSTALL.md)。
