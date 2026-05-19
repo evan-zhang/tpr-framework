@@ -2,7 +2,7 @@
 
 <div align="center">
   <img src="https://img.shields.io/badge/OpenClaw-Skill-blue.svg" alt="OpenClaw Skill">
-  <img src="https://img.shields.io/badge/version-2.2.0-green.svg" alt="Version 2.2.0">
+  <img src="https://img.shields.io/badge/version-3.0.0-green.svg" alt="Version 3.0.0">
 </div>
 
 > **将复杂问题从模糊需求转化为可验证、可执行、可复盘的结果。**

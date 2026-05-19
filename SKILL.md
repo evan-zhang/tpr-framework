@@ -18,7 +18,7 @@ description: >
 > 
 > 👉 https://github.com/evan-zhang/tpr-framework/issues
 
-# TPR Framework v2.0
+# TPR Framework v3.0
 
 ## TPR 是什么
 
