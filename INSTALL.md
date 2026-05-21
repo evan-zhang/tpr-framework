@@ -56,7 +56,23 @@ git pull origin main
 
 ---
 
-## 四、快速验证
+## 四、（可选）安装 Ralph Loop
+
+如果需要使用 Phase 4 Mode B（Ralph Loop 持续执行），需额外安装 Ralph Loop：
+
+```bash
+# 方式一：克隆 agent-factory 仓库
+git clone https://github.com/evan-zhang/agent-factory.git
+# Ralph Loop 位于 agent-factory/projects/2605211/ralph/
+
+# 方式二：单独下载
+curl -fsSL https://raw.githubusercontent.com/evan-zhang/agent-factory/master/projects/2605211/ralph/SKILL.md -o ralph/SKILL.md
+# 详见 references/tpr-bridge-protocol.md § Ralph Loop 安装
+```
+
+---
+
+## 五、快速验证
 
 对 Agent 说：
 

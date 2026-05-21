@@ -240,5 +240,6 @@ R: 结论是 _______________
 | 设计多 Agent 架构 | references/multi-agent-pattern.md | 全流程 |
 | 产出交付规范 | references/output-delivery.md | 全流程 |
 | Implementation 阶段 | references/tpr-execution.md § Implementation | 全流程 |
+| Phase 4 Mode B 桥接 | references/tpr-bridge-protocol.md | 全流程（选择 Ralph Loop 时） |
 | 安装后配置 | references/setup.md | 通用 |
 | 智能更新守护进程 | references/update-daemon.md | 通用 |

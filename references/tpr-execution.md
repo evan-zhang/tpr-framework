@@ -183,6 +183,26 @@
 
 见 `tpr-cognitive.md` § 微型 T/P/R 协议。
 
+### Implementation 执行模式选择
+
+进入 Implementation 前，与用户确认执行方式：
+
+**方式 A：执行层单线程执行**（适合简单任务，步骤已知）
+
+**方式 B：Ralph Loop 持续执行**（适合复杂任务、多阶段、预计 > 30 分钟）
+
+- 触发条件：Battle 通过 + GRV 定稿 + 用户说"开始执行"或"持续执行"
+- 操作：参见 `references/tpr-bridge-protocol.md` 进行 GRV → Ralph Loop 桥接
+- 桥接输出：GRV → checklist + ralph-state.json + PROMPT.md → coding agent 持续执行
+
+> 推荐默认选 B。Ralph Loop 的循环验证机制可以避免"执行到一半发现方案有问题"的风险。
+>
+> Ralph Loop skill 地址：<https://github.com/evan-zhang/agent-factory/tree/master/projects/2605211/ralph>
+>
+> **如果未安装 Ralph Loop**：参见 `references/tpr-bridge-protocol.md` § Ralph Loop 安装。
+
+**方式 C：其他 coding agent**（直接调用 Claude Code / Codex，一次性执行）
+
 ### 执行节点自检 (Self-Verification)
 
 作为最后一道业务承重墙，执行层在真实执行完毕后，**严禁未验证即单方面宣布“竣工”并击鼓传花**。交出文件前必须执行自查闭环：
