@@ -223,9 +223,11 @@ sub-agent 任务 prompt 中必须明确说明：
 
 ## 产出交付集成
 
-每个阶段完成后，编排者确保文件已写入本地项目目录（`rt_root_dir`）。产出交付规范详见 `references/output-delivery.md`。
+每个阶段完成后，编排者确保文件已写入本地项目目录（RT 根目录）。产出交付规范详见 `references/output-delivery.md`。
 
-- **写本地文件** — 编排者或 sub-agent 将产出写入 `{rt_root_dir}/{项目编号}/` 下的对应文件
+RT 根目录的确定方式：首次启动 TPR 流程时，向用户建议 `{workspace}/projects` 作为默认路径，由用户确认或指定其他路径。确认后在整个流程中使用该路径。
+
+- **写本地文件** — 编排者或 sub-agent 将产出写入 `{RT 根目录}/{项目编号}/` 下的对应文件
 - **HTML 版本** — 关键文件（DISCOVERY、GRV、交付物、验收）额外生成 HTML，一并写入本地目录
 
 **编排者不负责生成 HTML 内容**——编排者 spawn 独立的 sub-agent 执行 HTML 生成，或在派遣执行层时在 task 中包含 HTML 生成指令。

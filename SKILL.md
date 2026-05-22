@@ -66,7 +66,7 @@ description: >
 | A | 是否需要正式交付物（DISCOVERY.md / GRV.md / 报告等） |
 | B | 是否需要多角色审查（审查侧介入 / Battle） |
 | C | 是否需要阶段流转（DISCOVERY → GRV → Battle → Implementation） |
-| D | agent 是否具备 sub-agent 能力（can_spawn = true） |
+| D | agent 运行时是否具备 sub-agent 能力（自检） |
 
 **判定规则**：
 - A/B/C 中满足 ≥ 2 项 → **TPR 全流程**
@@ -74,7 +74,7 @@ description: >
 - D = false → 强制 **TPR 思维**，禁止伪装全流程
 - 用户明确说"走 GRV / Battle / 三层架构" → 强制 **TPR 全流程**（仍受 D 约束）
 
-**⚠️ 进入全流程前必须自检**：在宣布进入 TPR 全流程之前，先确认自己是否具备 sub-agent 能力（can_spawn）。如果不具备，必须降级为 TPR 思维，并向用户说明原因。不得跳过此检查。
+**⚠️ 进入全流程前必须自检**：在宣布进入 TPR 全流程之前，先确认自己是否具备 sub-agent 能力。自检方法：检查当前运行环境是否支持 spawn sub-agent（如 OpenClaw 的 `sessions_spawn`、Claude Code 的 `agent` 工具等）。如果不具备，必须降级为 TPR 思维，并向用户说明原因。不得跳过此检查。
 
 ### 何时不使用 TPR
 
@@ -109,7 +109,7 @@ R: 结论是 _______________
 
 ### TPR 全流程（编排型 agent 可用）
 
-需要 can_spawn = true。按三层四阶段执行完整项目：
+需要运行时自检确认具备 sub-agent 能力。按三层四阶段执行完整项目：
 
 | 阶段 | 认知重心 | 产出 |
 |------|---------|------|
@@ -241,5 +241,5 @@ R: 结论是 _______________
 | 产出交付规范 | references/output-delivery.md | 全流程 |
 | Implementation 阶段 | references/tpr-execution.md § Implementation | 全流程 |
 | Phase 4 Mode B 桥接 | references/tpr-bridge-protocol.md | 全流程（选择 Ralph Loop 时） |
-| 安装后配置 | references/setup.md | 通用 |
+| 安装指引 | references/setup.md | 通用 |
 | 智能更新守护进程 | references/update-daemon.md | 通用 |

@@ -22,7 +22,7 @@
     └── P-ACPT-{nn}.md         ← 验收文档
 ```
 
-**RT 根目录**由 AGENTS.md 的 `rt_root_dir` 配置决定。
+**RT 根目录**在首次启动 TPR 流程时由 Agent 向用户建议（默认 `{workspace}/projects`），用户确认后使用。整个流程中保持一致。
 
 ---
 

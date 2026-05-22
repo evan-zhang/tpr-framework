@@ -1,11 +1,15 @@
-# 安装后配置
+# 安装指引
 
-如果你是编排型 agent 且需要跑 TPR 全流程，建议在 AGENTS.md 中声明：
+TPR Framework 不需要手动配置任何参数。安装后即可使用。
 
-| 声明项 | 说明 | 示例 |
-|--------|------|------|
-| tpr_mode | 使用模式 | cognitive / full |
-| can_spawn | 是否能派生 sub-agent | true / false |
-| rt_root_dir | 本地 RT 项目目录的根路径 | ~/.openclaw/.../workspace/projects |
+## 运行时检测
 
-> 详细的安装指引见项目根目录 [INSTALL.md](../INSTALL.md)。
+Agent 在运行时自动完成以下检测，无需在 AGENTS.md 或配置文件中声明：
+
+| 检测项 | 方法 |
+|--------|------|
+| sub-agent 能力 | 检查运行环境是否支持 spawn sub-agent |
+| TPR 模式 | 根据判定矩阵自动判定（全流程 / TPR 思维） |
+| RT 根目录 | 首次使用时向用户建议默认路径，用户确认后使用 |
+
+详细的安装步骤见项目根目录 [INSTALL.md](../INSTALL.md)。
