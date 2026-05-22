@@ -27,43 +27,17 @@ cd ~/.openclaw/skills/tpr-framework && git pull origin main
 
 ---
 
-## 二、快速验证
+## 二、安装 Ralph Loop（TPR 持续执行引擎）
 
-对 Agent 说：
+> ⚠️ **TPR + Ralph Loop 才是完整方案。** TPR 负责从需求到方案（DISCOVERY → GRV → Battle），Ralph Loop 负责从方案到交付（Implementation）。不装 Ralph Loop，相当于 Battle 通过后缺了一条腿——方案定了但没人持续执行和验证。
 
-> "用 TPR 分析一下 XXX 需求"
+Ralph Loop 提供循环验证机制，确保每一步执行都经过自检，避免"做到一半发现方案有问题"的风险。
 
-Agent 应该按 DISCOVERY → GRV → Battle → Implementation 流程执行。
+### 前置要求
 
----
-
-## 三、运行时检测说明
-
-TPR Framework 不需要手动配置。Agent 在运行时自动完成以下检测：
-
-| 检测项 | 方法 | 影响 |
-|--------|------|------|
-| sub-agent 能力 | 检查运行环境是否支持 spawn（如 `sessions_spawn`、`agent` 工具等） | 不具备则降级为 TPR 思维 |
-| TPR 模式 | 根据判定矩阵（A/B/C/D 四项）自动判定 | A/B/C ≥ 2 → 全流程，否则 → TPR 思维 |
-| RT 根目录 | 首次使用时向用户建议默认路径（`{workspace}/projects`），用户可指定其他路径 | 用户确认后在整个流程中使用 |
-
-### RT 根目录确认流程
-
-1. Agent 首次启动 TPR 流程时，向用户建议：`{workspace}/projects`
-2. 用户确认，或指定新路径
-3. 确认后的路径在当前会话中持续使用
-4. 用户随时可以通过对话重新指定
-
----
-
-## 四、推荐安装 Ralph Loop
-
-Ralph Loop 是 TPR Implementation 阶段的持续执行引擎。它提供循环验证机制，确保每一步执行都经过自检，避免"做到一半发现方案有问题"的风险。
-
-- **装了 Ralph Loop** → Implementation 默认使用 Mode B（持续验证执行），适合复杂项目
-- **没装** → 自动降级为 Mode A（单线程执行）或 Mode C（一次性 coding agent），功能不受影响但缺乏持续验证
-
-> 💡 强烈推荐安装。Ralph Loop 让 TPR 从"方案框架"升级为"端到端交付闭环"——Battle 通过后的方案可以直接交给它持续执行，无需人工盯盘。
+- bash（macOS / Linux 自带）
+- AI 执行器（任选其一）：[Claude Code](https://docs.anthropic.com/en/docs/claude-code) 或 [OpenAI Codex](https://github.com/openclaw/codex)
+- git
 
 ### 安装方式
 
@@ -98,21 +72,47 @@ bash ralph/scripts/ralph-loop.sh --help
 bash ralph/scripts/init-state.sh --help
 ```
 
-### 前置要求
-
-- bash（macOS / Linux 自带）
-- AI 执行器（任选其一）：[Claude Code](https://docs.anthropic.com/en/docs/claude-code) 或 [OpenAI Codex](https://github.com/openclaw/codex)
-- git
-
 详细的桥接规范见 `references/tpr-bridge-protocol.md`。
 
 ---
 
-## 五、更新 TPR Skill
+## 三、快速验证
+
+对 Agent 说：
+
+> "用 TPR 分析一下 XXX 需求"
+
+Agent 应该按 DISCOVERY → GRV → Battle → Implementation 流程执行。
+
+---
+
+## 四、运行时检测说明
+
+TPR Framework 不需要手动配置。Agent 在运行时自动完成以下检测：
+
+| 检测项 | 方法 | 影响 |
+|--------|------|------|
+| sub-agent 能力 | 检查运行环境是否支持 spawn（如 `sessions_spawn`、`agent` 工具等） | 不具备则降级为 TPR 思维 |
+| TPR 模式 | 根据判定矩阵（A/B/C/D 四项）自动判定 | A/B/C ≥ 2 → 全流程，否则 → TPR 思维 |
+| RT 根目录 | 首次使用时向用户建议默认路径（`{workspace}/projects`），用户可指定其他路径 | 用户确认后在整个流程中使用 |
+
+### RT 根目录确认流程
+
+1. Agent 首次启动 TPR 流程时，向用户建议：`{workspace}/projects`
+2. 用户确认，或指定新路径
+3. 确认后的路径在当前会话中持续使用
+4. 用户随时可以通过对话重新指定
+
+---
+
+## 五、更新
 
 ```bash
-cd ~/.openclaw/skills/tpr-framework
-git pull origin main
+# 更新 TPR Framework
+cd ~/.openclaw/skills/tpr-framework && git pull origin main
+
+# 更新 Ralph Loop（方式一安装的）
+cd agent-factory && git pull origin master
 ```
 
 ---
@@ -123,3 +123,4 @@ git pull origin main
 |------|------|
 | Agent 说"不具备 sub-agent 能力" | 当前运行环境不支持 spawn，自动降级为 TPR 思维模式 |
 | RT 文件写到了哪里 | 检查 Agent 建议的 RT 根目录，默认是 `{workspace}/projects` |
+| 没装 Ralph Loop 会怎样 | Implementation 阶段自动降级为 Mode A（单线程）或 Mode C（一次性执行），功能可用但缺乏持续验证。强烈建议安装 |
