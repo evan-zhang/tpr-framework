@@ -56,20 +56,55 @@ TPR Framework 不需要手动配置。Agent 在运行时自动完成以下检测
 
 ---
 
-## 四、（可选）安装 Ralph Loop
+## 四、推荐安装 Ralph Loop
 
-如果需要使用 Phase 4 Mode B（Ralph Loop 持续执行），需额外安装 Ralph Loop：
+Ralph Loop 是 TPR Implementation 阶段的持续执行引擎。它提供循环验证机制，确保每一步执行都经过自检，避免"做到一半发现方案有问题"的风险。
+
+- **装了 Ralph Loop** → Implementation 默认使用 Mode B（持续验证执行），适合复杂项目
+- **没装** → 自动降级为 Mode A（单线程执行）或 Mode C（一次性 coding agent），功能不受影响但缺乏持续验证
+
+> 💡 强烈推荐安装。Ralph Loop 让 TPR 从"方案框架"升级为"端到端交付闭环"——Battle 通过后的方案可以直接交给它持续执行，无需人工盯盘。
+
+### 安装方式
+
+**方式一：克隆 agent-factory 仓库（推荐）**
 
 ```bash
-# 方式一：克隆 agent-factory 仓库
 git clone https://github.com/evan-zhang/agent-factory.git
 # Ralph Loop 位于 agent-factory/projects/2605211/ralph/
-
-# 方式二：单独下载
-curl -fsSL https://raw.githubusercontent.com/evan-zhang/agent-factory/master/projects/2605211/ralph/SKILL.md -o ralph/SKILL.md
-
-# 详见 references/tpr-bridge-protocol.md § Ralph Loop 安装
+# 含：SKILL.md、scripts/（ralph-loop.sh、init-state.sh）、references/
 ```
+
+**方式二：单独下载关键文件**
+
+```bash
+mkdir -p ralph/{scripts,references}
+
+curl -o ralph/SKILL.md https://raw.githubusercontent.com/evan-zhang/agent-factory/master/projects/2605211/ralph/SKILL.md
+curl -o ralph/scripts/ralph-loop.sh https://raw.githubusercontent.com/evan-zhang/agent-factory/master/projects/2605211/ralph/scripts/ralph-loop.sh
+curl -o ralph/scripts/init-state.sh https://raw.githubusercontent.com/evan-zhang/agent-factory/master/projects/2605211/ralph/scripts/init-state.sh
+curl -o ralph/version.json https://raw.githubusercontent.com/evan-zhang/agent-factory/master/projects/2605211/ralph/version.json
+chmod +x ralph/scripts/*.sh
+
+# 参考模板（按需）
+curl -o ralph/references/prompt-template-executor.md https://raw.githubusercontent.com/evan-zhang/agent-factory/master/projects/2605211/ralph/references/prompt-template-executor.md
+curl -o ralph/references/prompt-template-autonomous.md https://raw.githubusercontent.com/evan-zhang/agent-factory/master/projects/2605211/ralph/references/prompt-template-autonomous.md
+```
+
+### 验证安装
+
+```bash
+bash ralph/scripts/ralph-loop.sh --help
+bash ralph/scripts/init-state.sh --help
+```
+
+### 前置要求
+
+- bash（macOS / Linux 自带）
+- AI 执行器（任选其一）：[Claude Code](https://docs.anthropic.com/en/docs/claude-code) 或 [OpenAI Codex](https://github.com/openclaw/codex)
+- git
+
+详细的桥接规范见 `references/tpr-bridge-protocol.md`。
 
 ---
 
