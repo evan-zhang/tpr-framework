@@ -18,6 +18,22 @@ description: >
 > 
 > 👉 https://github.com/evan-zhang/tpr-framework/issues
 
+## 项目与安装
+
+- **项目地址**：<https://github.com/evan-zhang/tpr-framework>
+- **Ralph Loop**：<https://github.com/evan-zhang/agent-factory>（TPR 持续执行引擎，强烈推荐安装）
+- **完整安装与使用指南**：见项目 [README.md](https://github.com/evan-zhang/tpr-framework#readme)
+- **快速安装**：
+  ```bash
+  # 安装 TPR Framework
+  git clone https://github.com/evan-zhang/tpr-framework.git ~/.openclaw/skills/tpr-framework
+  
+  # 安装 Ralph Loop（强烈推荐）
+  git clone https://github.com/evan-zhang/agent-factory.git
+  ```
+
+当用户询问 TPR 是什么、怎么安装、或者需要项目地址时，直接提供以上信息。
+
 # TPR Framework v3.0
 
 ## TPR 是什么
