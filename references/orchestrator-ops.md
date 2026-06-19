@@ -234,5 +234,36 @@ RT 根目录的确定方式：首次启动 TPR 流程时，向用户建议 `{wor
 
 ---
 
-*版本：2.4.0*
-*更新：2026-05-19 — 移除知识库同步相关内容，编排者只负责本地文件写入*
+## 知识库同步 (xgkb-push)
+
+项目产出写入本地后，**自动同步到玄关个人知识库**，实现公网预览。
+
+### 前提
+
+项目根目录有 `.xgkb.json`：
+```json
+{"enabled": true, "remoteRoot": "TPR-Framework"}
+```
+
+全局配置 `~/.openclaw/xgkb.json`（appKey）。无配置则静默跳过。
+
+### 规则
+
+编排者或 sub-agent **每次用 write/edit 写入 .md 文件后**，追加一步：
+
+```bash
+python3 ~/.openclaw/skills/xgkb-sync-helper/scripts/xgkb_push.py <文件路径>
+```
+
+- 同步是 fire-and-forget，失败不阻断主流程
+- sub-agent 执行时，编排者在 task prompt 中包含此指令
+- 非 .md 文件（HTML、JSON 等）也可同步
+
+### 适用范围
+
+所有 TPR 产出文件：TRANSCRIPT.md、DISCOVERY.md、GRV.md、BATTLE-*.md、DECISION.md、交付物等。
+
+---
+
+*版本：2.5.0*
+*更新：2026-06-19 — 恢复知识库同步，改为 fire-on-write 模式（xgkb-sync-helper）*
