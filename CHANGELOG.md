@@ -6,6 +6,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ---
 
+## [3.1.0] - 2026-06-20
+
+### Added
+- **知识库同步回归** — 新增 fire-on-write 模式，依赖 xgkb-sync-helper
+  - SKILL.md 新增「知识库同步」章节：配置方法、同步规则、批量同步
+  - orchestrator-ops.md v2.5.0：编排者/sub-agent 写文件后自动调 xgkb-push
+  - INSTALL.md 新增 xgkb-sync-helper 安装配置步骤
+  - `projects/.xgkb.json` 统一配置，所有项目共用，零配置接入
+
+### Changed
+- 知识库同步从 v3.0.0 的「移除」改为「轻量内嵌」
+  - v3.0.0 依赖 openclaw-xgkb-sync 独立服务（已过时）
+  - v3.1.0 使用 xgkb-sync-helper fire-on-write（零进程依赖）
+
+---
+
 ## [3.0.0] - 2026-05-19
 
 ### Changed
