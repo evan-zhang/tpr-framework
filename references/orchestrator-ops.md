@@ -240,7 +240,7 @@ RT 根目录的确定方式：首次启动 TPR 流程时，向用户建议 `{wor
 
 ### 前提
 
-项目根目录有 `.xgkb.json`：
+项目集合根目录（`projects/`）有一个 `.xgkb.json`，所有项目共用：
 ```json
 {"enabled": true, "remoteRoot": "TPR-Framework"}
 ```
