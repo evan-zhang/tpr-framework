@@ -43,10 +43,10 @@ cat > ~/.openclaw/xgkb.json << 'EOF'
 EOF
 ```
 
-在 TPR 项目根目录启用同步：
+在项目集合根目录启用同步（一个配置管所有项目）：
 
 ```bash
-echo '{"enabled": true, "remoteRoot": "TPR-Framework"}' > /path/to/your/project/.xgkb.json
+echo '{"enabled": true, "remoteRoot": "TPR-Framework"}' > ~/.openclaw/gateways/life/state/workspace-life/projects/.xgkb.json
 ```
 
 > appKey 获取：玄关开放平台 → 个人设置 → API 密钥
