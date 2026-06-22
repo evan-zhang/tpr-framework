@@ -1,13 +1,10 @@
 ---
 name: tpr-framework
 description: >
-  TPR（Think / Probe / Review）认知闭环 + 三层四阶段执行框架。
-  成功标准：用户拿到 GRV 后能直接做决策、所有分歧有记录、任何结论可追溯到具体假设。
-  当遇到以下场景时激活：
-  - 需要结构化分析复杂问题
-  - 启动项目、起草方案、审查方案
-  - 用户提到 TPR / 三层架构 / GRV / Battle / DISCOVERY
-  - 需要做决策前的系统性思考
+  引导用户结构化分析复杂问题，通过 TPR（Think / Probe / Review）认知闭环和三层四阶段执行框架产出可决策的方案。
+  覆盖场景：结构化分析复杂问题、启动项目/起草方案/审查方案、用户提到 TPR/GRV/Battle/DISCOVERY、决策前系统性思考。
+  不适用：简单问答、单步执行、已有明确答案的查询。
+  触发词：TPR、三层架构、GRV、Battle、DISCOVERY
 ---
 
 > **📌 来源与反馈 (Origin & Feedback)**
@@ -68,7 +65,7 @@ python3 ~/.openclaw/skills/xgkb-sync-helper/scripts/xgkb_push.py <文件路径>
 - 无配置或 `enabled: false` 时静默跳过
 - 批量同步整个目录：`python3 ~/.openclaw/skills/xgkb-sync-helper/scripts/xgkb_sync_dir.py <目录>`
 
-# TPR Framework v3.0
+# TPR Framework v3.1.0
 
 ## TPR 是什么
 
