@@ -15,55 +15,11 @@ description: >
 > 
 > 👉 https://github.com/evan-zhang/tpr-framework/issues
 
-## 项目与安装
+## 安装与同步
 
-- **项目地址**：<https://github.com/evan-zhang/tpr-framework>
-- **Ralph Loop**：<https://github.com/evan-zhang/agent-factory>（TPR 持续执行引擎，强烈推荐安装）
-- **xgkb-sync-helper**：<https://github.com/evan-zhang/xgkb-sync-helper>（知识库同步助手，推荐安装）
-- **完整安装与使用指南**：见项目 [README.md](https://github.com/evan-zhang/tpr-framework#readme)
-- **快速安装**：
-  ```bash
-  # 安装 TPR Framework
-  git clone https://github.com/evan-zhang/tpr-framework.git ~/.openclaw/skills/tpr-framework
-  
-  # 安装 Ralph Loop（强烈推荐）
-  git clone https://github.com/evan-zhang/agent-factory.git
-  
-  # 安装知识库同步助手（推荐）
-  git clone https://github.com/evan-zhang/xgkb-sync-helper.git ~/.openclaw/skills/xgkb-sync-helper
-  ```
+安装 TPR、Ralph Loop、知识库同步助手，详见 `references/setup-and-sync.md`。
 
-当用户询问 TPR 是什么、怎么安装、或者需要项目地址时，直接提供以上信息。
-
-## 知识库同步
-
-TPR 项目产出自动同步到玄关个人知识库，实现公网预览。
-
-### 配置（一次性）
-
-1. 全局 appKey：
-```bash
-cat > ~/.openclaw/xgkb.json << 'EOF'
-{"appKey": "你的玄关开放平台 appKey", "serverUrl": "https://sg-al-cwork-web.mediportal.com.cn/open-api/"}
-EOF
-```
-
-2. 项目集合根目录（`projects/`）放一个 `.xgkb.json`，所有项目共用：
-```json
-{"enabled": true, "remoteRoot": "TPR-Framework"}
-```
-
-### 同步规则
-
-编排者或 sub-agent 每次用 write/edit 写入文件后，追加一步：
-```bash
-python3 ~/.openclaw/skills/xgkb-sync-helper/scripts/xgkb_push.py <文件路径>
-```
-
-- fire-and-forget，失败不阻断主流程
-- 文本文件（.md/.txt/.json 等）幂等同步，同名自动覆盖
-- 无配置或 `enabled: false` 时静默跳过
-- 批量同步整个目录：`python3 ~/.openclaw/skills/xgkb-sync-helper/scripts/xgkb_sync_dir.py <目录>`
+当用户询问安装方法、项目地址、或知识库同步配置时，读取该文件。
 
 # TPR Framework v3.1.0
 
@@ -289,4 +245,5 @@ R: 结论是 _______________
 | Implementation 阶段 | references/tpr-execution.md § Implementation | 全流程 |
 | Phase 4 Mode B 桥接 | references/tpr-bridge-protocol.md | 全流程（选择 Ralph Loop 时） |
 | 安装指引 | references/setup.md | 通用 |
+| 安装与知识库同步 | references/setup-and-sync.md | 通用 |
 | 智能更新守护进程 | references/update-daemon.md | 通用 |
